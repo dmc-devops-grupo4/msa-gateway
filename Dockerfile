@@ -1,14 +1,12 @@
 # Etapa 1: build con Maven
-FROM eclipse-temurin:17-jdk AS build
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-COPY mvnw .
-COPY .mvn .mvn
 COPY pom.xml .
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+RUN mvn dependency:go-offline -B
 
 COPY src src
-RUN ./mvnw clean package -DskipTests -B
+RUN mvn clean package -DskipTests -B
 
 # Etapa 2: correr el jar
 FROM eclipse-temurin:17-jre
